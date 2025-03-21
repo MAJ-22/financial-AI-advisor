@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { FiSend, FiRefreshCw } from 'react-icons/fi';
+import { FiSend, FiRefreshCw, FiMic } from 'react-icons/fi';
 import ReactMarkdown from 'react-markdown';
 import { Link } from 'react-router-dom';
 
@@ -12,7 +12,28 @@ function Chat() {
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isListening, setIsListening] = useState(false);
   const messagesEndRef = useRef(null);
+
+  const recognition = useRef(null);
+
+  useEffect(() => {
+    if ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window) {
+      recognition.current = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.current.continuous = false;
+      recognition.current.interimResults = false;
+      recognition.current.lang = 'en-US';
+
+      recognition.current.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        setInput(transcript);
+      };
+
+      recognition.current.onend = () => {
+        setIsListening(false);
+      };
+    }
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -52,7 +73,6 @@ function Chat() {
     setIsLoading(false);
   };
   
-
   const resetChat = () => {
     setMessages([
       {
@@ -60,6 +80,13 @@ function Chat() {
         content: "Hello! I'm your AI Financial Advisor. I can help you with:\n\n"
       }
     ]);
+  };
+
+  const startListening = () => {
+    if (recognition.current) {
+      setIsListening(true);
+      recognition.current.start();
+    }
   };
 
   return (
@@ -117,7 +144,15 @@ function Chat() {
 
             <div className="border-t border-[#2A2F3E] pt-4">
               <form onSubmit={handleSubmit}>
-                <div className="relative">
+                <div className="relative flex">
+                  <button
+                    type="button"
+                    onClick={startListening}
+                    className={`p-2 mr-2 text-[#6B7280] hover:text-[#4CAF50] transition-colors rounded-lg ${isListening ? 'text-[#4CAF50]' : ''}`}
+                    title="Speak"
+                  >
+                    <FiMic className="w-6 h-6" />
+                  </button>
                   <input
                     type="text"
                     value={input}
@@ -136,6 +171,7 @@ function Chat() {
                 </div>
               </form>
             </div>
+
           </div>
         </div>
       </div>
