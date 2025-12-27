@@ -29,6 +29,6 @@ This project is a cutting-edge, full-stack application designed to deliver perso
 | Layer       | Technology                     |
 |------------|----------------------------------|
 | **Frontend** | React, Tailwind CSS, React Router, React Icons |
-| **Backend**  | Flask, Python, Groq API llama-3.1-8b-instant), dotenv |
+| **Backend**  | Flask, Python, Groq API (llama-3.1-8b-instant), dotenv |
 | **APIs**     | Groq (LLM), Browser SpeechRecognition |
 | **Tools**    | React Markdown, CORS, GitHub |
