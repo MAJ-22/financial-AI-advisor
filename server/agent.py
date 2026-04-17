@@ -47,7 +47,7 @@ Be concise, data-driven, and ensure responses are structured for clarity and dec
 
 )
 
-QWEN_MODEL = "qwen-qwq-32b"  # Adjust model if needed
+QWEN_MODEL = "qwen/qwen3-32b"  # Adjust model if needed
 
 # Store conversation history (In production, use a database)
 conversation_history = [{"role": "system", "content": SYSTEM_PROMPT}]
